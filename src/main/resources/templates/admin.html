@@ -1,0 +1,529 @@
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Admin panel</title>
+</head>
+
+<body>
+<nav class="navbar navbar-dark bg-dark p-0 shadow">
+    <div class="nav-item text-left text-white px-3">
+        <span class="fw-bold" id="userEmail"></span>
+        <span>with roles:</span>
+        <span id="userRoles"></span>
+    </div>
+    <ul class="navbar-nav mr-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link px-3" href="/logout">Logout</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2">
+            <div class="nav flex-column nav-pills" id="left-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="admin-left-tab" href="/admin" role="tab" aria-controls="admin-tab" aria-selected="true">Admin</a>
+                <a class="nav-link" id="user-left-tab" href="/user" role="tab" aria-controls="user-tab" aria-selected="false">User</a>
+            </div>
+        </div>
+
+        <div class="col-10">
+            <div class="tab-content" id="tab-content">
+                <h1>Admin panel</h1>
+
+                <ul class="nav nav-tabs" id="user-new_user-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="user-table-tab" data-toggle="tab" href="#" role="tab" aria-controls="home" aria-selected="true">Users Table</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="new_user-tab" data-toggle="tab" href="#" role="tab" aria-controls="profile" aria-selected="false">New User</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="table-tab-content">
+
+                    <!-- Users table -->
+                    <div class='tab-pane fade show active' id='userTableSection' role='tabpanel'>
+                        <div class="container-fluid px-0">
+                            <h5 class="card-header text-left">All users</h5>
+                        </div>
+                        <table class='table table-striped'>
+                            <thead>
+                            <tr>
+                                <th scope='col'><b>ID</b></th>
+                                <th scope='col'><b>FirstName</b></th>
+                                <th scope='col'><b>LastName</b></th>
+                                <th scope='col'><b>Age</b></th>
+                                <th scope='col'><b>Email</b></th>
+                                <th scope='col'><b>Role</b></th>
+                                <th scope='col'><b>Edit</b></th>
+                                <th scope='col'><b>Delete</b></th>
+                            </tr>
+                            </thead>
+                            <tbody id='userInfoTable'></tbody>
+                        </table>
+                    </div>
+                    <!-- Edit User -->
+                    <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editUserModalLabel">Edit user</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="editUserForm">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="form-group d-flex flex-column align-items-sm-center" style="width: 200px;">
+                                                <label class="form-label-sm fw-bold mb-0 text-sm-center" for="editUserId" style="font-size: 0.8rem;"><b>ID</b></label>
+                                                <input type="number" class="form-control form-control-sm" id="editUserId" readonly style="font-size: 0.8rem;">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="form-group d-flex flex-column align-items-sm-center" style="width: 200px;">
+                                                <label class="form-label-sm fw-bold mb-0 text-sm-center" for="editUserFirstName" style="font-size: 0.8rem;"><b>First name</b></label>
+                                                <input type="text" class="form-control form-control-sm" id="editUserFirstName" style="font-size: 0.8rem;">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="form-group d-flex flex-column align-items-sm-center" style="width: 200px;">
+                                                <label class="form-label-sm fw-bold mb-0 text-sm-center" for="editUserLastName" style="font-size: 0.8rem;"><b>Last name</b></label>
+                                                <input type="text" class="form-control form-control-sm" id="editUserLastName" style="font-size: 0.8rem;">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="form-group d-flex flex-column align-items-sm-center" style="width: 200px;">
+                                                <label class="form-label-sm fw-bold mb-0 text-sm-center" for="editUserAge" style="font-size: 0.8rem;"><b>Age</b></label>
+                                                <input type="number" class="form-control form-control-sm" id="editUserAge" style="font-size: 0.8rem;">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="form-group d-flex flex-column align-items-sm-center" style="width: 200px;">
+                                                <label class="form-label-sm fw-bold mb-0 text-sm-center" for="editUserEmail" style="font-size: 0.8rem;"><b>Email</b></label>
+                                                <input type="email" class="form-control form-control-sm" id="editUserEmail" style="font-size: 0.8rem;">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="form-group d-flex flex-column align-items-sm-center" style="width: 200px;">
+                                                <label class="form-label-sm fw-bold mb-0 text-sm-center" for="editUserPassword" style="font-size: 0.8rem;"><b>Password</b></label>
+                                                <input type="password" class="form-control form-control-sm" id="editUserPassword"
+                                                style="font-size: 0.8rem;">
+                                            </div>
+                                        </div>
+                                        <div class='d-flex justify-content-center'>
+                                            <div class='mb-3'>
+                                                <label class='form-label-sm fw-bold mb-0 text-sm-center' for='editUserRole' style='width: 200px; font-size: 0.8rem;'><b>Role</b></label>
+                                                <select id='editUserRole' multiple='multiple' class='form-control' style='width: 200px; height: 40px; font-size: 0.7rem;'>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class='modal-footer'>
+                                    <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
+                                    <button type='button' class='btn btn-info text-white' id='confirmEdit'>Edit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Delete User -->
+                    <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteUserModalLabel">Delete user</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="deleteUserForm">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="form-group d-flex flex-column align-items-sm-center" style="width: 200px;">
+                                                <label class="form-label-sm fw-bold mb-0 text-sm-center" for="deleteUserId" style="font-size: 0.8rem;"><b>ID</b></label>
+                                                <input type="number" class="form-control form-control-sm" id="deleteUserId" readonly style="font-size: 0.8rem;">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="form-group d-flex flex-column align-items-sm-center" style="width: 200px;">
+                                                <label class="form-label-sm fw-bold mb-0 text-sm-center" for="deleteUserFirstName" style="font-size: 0.8rem;"><b>First name</b></label>
+                                                <input type="text" class="form-control form-control-sm" id="deleteUserFirstName" readonly style="font-size: 0.8rem;">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="form-group d-flex flex-column align-items-sm-center" style="width: 200px;">
+                                                <label class="form-label-sm fw-bold mb-0 text-sm-center" for="deleteUserLastName" style="font-size: 0.8rem;"><b>Last name</b></label>
+                                                <input type="text" class="form-control form-control-sm" id="deleteUserLastName" readonly style="font-size: 0.8rem;">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="form-group d-flex flex-column align-items-sm-center" style="width: 200px;">
+                                                <label class="form-label-sm fw-bold mb-0 text-sm-center" for="deleteUserAge" style="font-size: 0.8rem;"><b>Age</b></label>
+                                                <input type="number" class="form-control form-control-sm" id="deleteUserAge"
+                                                readonly style="font-size: 0.8rem;">
+                                            </div>
+                                        </div>
+                                        <div class='d-flex justify-content-center'>
+                                            <div class='form-group d-flex flex-column align-items-sm-center' style='width: 200px;'>
+                                                <label class='form-label-sm fw-bold mb-0 text-sm-center' for='deleteUserEmail' style='font-size: 0.8rem;'><b>Email</b></label>
+                                                <input type='email' class='form-control form-control-sm' id='deleteUserEmail' readonly style='font-size: 0.8rem;'>
+                                            </div>
+                                        </div>
+                                        <div class='d-flex justify-content-center'>
+                                            <div class='mb-3'>
+                                                <label class='form-label-sm fw-bold mb-0 text-sm-center' for='deleteUserRole' style='width: 200px; font-size: 0.8rem;'><b>Role</b></label>
+                                                <select id='deleteUserRole' multiple='multiple' class='form-control' readonly style='width: 200px; height: 40px; font-size: 0.7rem;'>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class='modal-footer'>
+                                    <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
+                                    <button type='button' class='btn btn-danger' id='confirmDelete'>Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add new user -->
+                    <div class="tab-pane fade" id="newUserSection" role="tabpanel">
+                        <div class="d-flex justify-content-center">
+                            <div class="container-fluid px-0">
+                                <h5 class="card-header text-left">Add new user</h5>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <div class="container-fluid px-0">
+                                <div class="card">
+                                    <div class="card-body text-center mt-3" style="padding-top: 0px; margin-top: 10px;">
+                                        <div class="d-flex justify-content-center">
+                                            <form id="addUserForm">
+                                                <div class="form-group d-flex flex-column align-items-sm-center" style="width: 200px;">
+                                                    <label for="addUserFirstname" class="form-label-sm fw-bold mb-0" style="font-size: 0.8rem;"><b>First name</b></label>
+                                                    <input type="text" class="form-control-sm border-secondary" id="addUserFirstname" placeholder="First name" style="font-size: 0.8rem; border: 1px solid #ccc;">
+                                                </div>
+                                                <div class="form-group d-flex flex-column align-items-sm-center" style="width: 200px;">
+                                                    <label for="addUserLastname" class="form-label-sm fw-bold mb-0" style="font-size: 0.8rem;"><b>Last name</b></label>
+                                                    <input type="text" class="form-control-sm border-secondary" id="addUserLastname" placeholder="Last name" style="font-size: 0.8rem; border: 1px solid #ccc;">
+                                                </div>
+                                                <div class="form-group d-flex flex-column align-items-sm-center" style="width: 200px;">
+                                                    <label for="addUserAge" class="form-label fw-bold mb-0" style="font-size: 0.8rem;"><b>Age</b></label>
+                                                    <input type="number" class="form-control-sm border-secondary" id="addUserAge" placeholder="Age" style="font-size: 0.8rem; border: 1px solid #ccc;">
+                                                </div>
+                                                <div class="form-group d-flex flex-column align-items-sm-center" style="width: 200px;">
+                                                    <label for="addUserEmail" class="form-label-sm fw-bold mb-0" style="font-size: 0.8rem;"><b>Email</b></label>
+                                                    <input type="email" class="form-control-sm border-secondary" id="addUserEmail"
+                                                    placeholder="Email"
+                                                    style="font-size: 0.8rem; border: 1px solid #ccc;">
+                                                </div>
+                                                <div class='form-group d-flex flex-column align-items-sm-center' style='width: 200px;'>
+                                                    <label for='addUserPassword' class='form-label-sm fw-bold mb-0' style='font-size: 0.8rem;'><b>Password</b></label>
+                                                    <input type='password' class='form-control-sm border-secondary' id='addUserPassword' placeholder='Password' style='font-size: 0.8rem; border: 1px solid #ccc;'>
+                                                </div>
+                                                <div class='form-group d-flex flex-column align-items-sm-center' style='width: 200px; height: 55px;'>
+                                                    <label for='addUserRole' class='form-label-sm fw-bold mb-0' style='font-size: 0.8rem;'><b>Role</b></label>
+                                                    <select id='addUserRole' multiple='multiple' class='form-control' style='width: 170px; height: 45px; font-size: 0.7rem;'>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <button type='submit' class='btn btn-success'>Add new user</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    function updateUserTable() {
+        fetch('/api/admin')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(users => {
+                const userInfoTable = document.getElementById('userInfoTable');
+                userInfoTable.innerHTML = '';
+
+                users.forEach((user, index) => {
+                    if (index === 0) {
+                        document.getElementById('userEmail').textContent = user.email;
+                        document.getElementById('userRoles').textContent = user.roles.map(role => role.authority.substring(5)).join(', ');
+                    } else {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.id}</td>
+                            <td>${user.firstName}</td>
+                            <td>${user.lastName}</td>
+                            <td>${user.age}</td>
+                            <td>${user.email}</td>
+                            <td>${user.roles.map(role => role.authority.substring(5)).join(', ')}</td>
+                            <td>
+                                <button edit-id="${user.id}"
+                                        edit-firstname="${user.firstName}"
+                                        edit-lastname="${user.lastName}"
+                                        edit-age="${user.age}"
+                                        edit-email="${user.email}"
+                                        edit-password="${user.password}"
+                                        edit-role="${user.roles.map(role => role.authority.substring(5)).join(', ')}"
+                                        class='editBtn btn-sm btn-info text-white'
+                                        data-toggle='modal'
+                                        data-target='#editUserModal'>
+                                    Edit
+                                </button>
+                            </td>
+                            <td>
+                                <button delete-id="${user.id}"
+                                        delete-firstname="${user.firstName}"
+                                        delete-lastname="${user.lastName}"
+                                        delete-age="${user.age}"
+                                        delete-email="${user.email}"
+                                        delete-role="${user.roles.map(role => role.authority.substring(5)).join(', ')}"
+                                        class='deleteBtn btn-sm btn-danger text-white'
+                                        data-toggle='modal'
+                                        data-target='#deleteUserModal'>
+                                    Delete
+                                </button>
+                            </td>`;
+                        userInfoTable.appendChild(row);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    }
+</script>
+<script>
+    function clearEditModal() {
+        document.getElementById('editUserId').value = '';
+        document.getElementById('editUserFirstName').value = '';
+        document.getElementById('editUserLastName').value = '';
+        document.getElementById('editUserAge').value = '';
+        document.getElementById('editUserEmail').value = '';
+        document.getElementById('editUserPassword').value = '';
+        document.getElementById('editUserRole').innerHTML = '';
+    }
+</script>
+<script>
+    function clearDeleteModal() {
+        document.getElementById('deleteUserId').value = '';
+        document.getElementById('deleteUserFirstName').value = '';
+        document.getElementById('deleteUserLastName').value = '';
+        document.getElementById('deleteUserAge').value = '';
+        document.getElementById('deleteUserEmail').value = '';
+        document.getElementById('deleteUserRole').innerHTML = '';
+    }
+</script>
+<script>
+    function fetchRoles() {
+        return fetch('/api/admin/roles')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            });
+    }
+</script>
+<script>
+    document.addEventListener("click", function (event) {
+        if (event.target.classList.contains('editBtn')) {
+            const userId = event.target.getAttribute('edit-id');
+            const firstName = event.target.getAttribute('edit-firstname');
+            const lastName = event.target.getAttribute('edit-lastname');
+            const age = event.target.getAttribute('edit-age');
+            const email = event.target.getAttribute('edit-email');
+            const password = event.target.getAttribute('edit-password');
+
+            fetchRoles().then(roles => {
+                const selectElementForEdit = document.getElementById('editUserRole');
+                selectElementForEdit.innerHTML = '';
+
+                roles.forEach(role => {
+                    const option = document.createElement('option');
+                    option.value = role.id;
+                    option.textContent = role.name.substring(5);
+                    selectElementForEdit.appendChild(option);
+                });
+
+                document.getElementById('editUserId').value = userId;
+                document.getElementById('editUserFirstName').value = firstName;
+                document.getElementById('editUserLastName').value = lastName;
+                document.getElementById('editUserAge').value = age;
+                document.getElementById('editUserEmail').value = email;
+                document.getElementById('editUserPassword').value = password;
+            });
+        }
+    });
+</script>
+<script>
+    document.getElementById('confirmEdit').addEventListener('click', function () {
+        const userId = document.getElementById('editUserId').value;
+        const selectedRolesIds = Array.from(document.getElementById('editUserRole').selectedOptions).map(option => option.value);
+
+        fetchRoles().then(roles => {
+            const updatedUser = {
+                id: parseInt(userId),
+                firstName: document.getElementById('editUserFirstName').value,
+                lastName: document.getElementById('editUserLastName').value,
+                age: parseInt(document.getElementById('editUserAge').value),
+                email: document.getElementById('editUserEmail').value,
+                password: document.getElementById('editUserPassword').value || null,
+                roles: roles.filter(role => selectedRolesIds.includes(role.id.toString()))
+            };
+
+            fetch(`/api/admin/edit/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedUser)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        $('#editUserModal').modal('hide');
+                        updateUserTable();
+                        clearEditModal();
+                    } else {
+                        return response.json().then(err => {
+                            throw new Error(err.message);
+                        });
+                    }
+                })
+        });
+    });
+</script>
+<script>
+    document.addEventListener("click", function (event) {
+        if (event.target.classList.contains('deleteBtn')) {
+            const userId = event.target.getAttribute('delete-id');
+            const firstName = event.target.getAttribute('delete-firstname');
+            const lastName = event.target.getAttribute('delete-lastname');
+            const age = event.target.getAttribute('delete-age');
+            const email = event.target.getAttribute('delete-email');
+            const rolesString = event.target.getAttribute('delete-role');
+
+            const selectElementForDeleteRole = document.getElementById('deleteUserRole');
+            selectElementForDeleteRole.innerHTML = '';
+
+            rolesString.split(', ').forEach(role => {
+                const option = document.createElement('option');
+                option.value = role;
+                option.textContent = role;
+                selectElementForDeleteRole.appendChild(option);
+            });
+
+            document.getElementById('deleteUserId').value = userId;
+            document.getElementById('deleteUserFirstName').value = firstName;
+            document.getElementById('deleteUserLastName').value = lastName;
+            document.getElementById('deleteUserAge').value = age;
+            document.getElementById('deleteUserEmail').value = email;
+        }
+    });
+</script>
+<script>
+    document.getElementById('confirmDelete').addEventListener('click', function () {
+        const userId = document.getElementById('deleteUserId').value;
+
+        fetch(`/api/admin/delete/${userId}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    $('#deleteUserModal').modal('hide');
+                    updateUserTable();
+                    clearDeleteModal();
+                } else {
+                    console.error("Error deleting user:", response.statusText);
+                }
+            })
+    });
+</script>
+<script>
+    fetchRoles().then(roles => {
+        const selectElement = document.getElementById('addUserRole');
+        selectElement.innerHTML = '';
+
+        roles.forEach(role => {
+            const option = document.createElement('option');
+            option.value = role.id;
+            option.textContent = role.name.substring(5);
+            selectElement.appendChild(option);
+        });
+
+        document.getElementById('addUserForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const selectedRolesIds = Array.from(document.getElementById('addUserRole').selectedOptions).map(option => option.value);
+            fetchRoles().then(roles => {
+                const selectedRoles = roles.filter(role => selectedRolesIds.includes(role.id.toString()));
+                const newUser = {
+                    firstName: document.getElementById('addUserFirstname').value,
+                    lastName: document.getElementById('addUserLastname').value,
+                    age: parseInt(document.getElementById('addUserAge').value),
+                    email: document.getElementById('addUserEmail').value,
+                    password: document.getElementById('addUserPassword').value,
+                    roles: selectedRoles
+                };
+
+                fetch('/api/admin/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newUser)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('newUserSection').classList.remove('show', 'active');
+                        document.getElementById('userTableSection').classList.add('show', 'active');
+                        document.getElementById('new_user-tab').classList.remove('show', 'active');
+                        document.getElementById('user-table-tab').classList.add('show', 'active');
+                        document.getElementById('addUserForm').reset();
+                        return fetch('/api/admin');
+                    } else {
+                        throw new Error('Error adding new user');
+                    }
+                })
+                .then(response => response.json())
+                .then(updateUserTable);
+            });
+        });
+    });
+</script>
+<script>
+    document.getElementById('new_user-tab').addEventListener('click', function () {
+        document.getElementById('userTableSection').classList.remove('show', 'active');
+        document.getElementById('newUserSection').classList.add('show', 'active');
+    });
+</script>
+<script>
+    document.getElementById('user-table-tab').addEventListener('click', function () {
+        document.getElementById('newUserSection').classList.remove('show', 'active');
+        document.getElementById('userTableSection').classList.add('show', 'active');
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", updateUserTable);
+</script>
+
+</body>
+</html>
