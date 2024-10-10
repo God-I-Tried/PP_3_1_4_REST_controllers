@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PageController {
 
     @RequestMapping("/user")
-    public String userPage() {
+    public String getUserPage() {
         return "user";
     }
 
     @RequestMapping("/admin")
-    public String adminPage() {
+    public String getAdminPage() {
         return "admin";
     }
 
     @RequestMapping(value={"/login", "/logout"})
-    public String login() {
+    public String getLoginPage() {
         return "login";
     }
 
